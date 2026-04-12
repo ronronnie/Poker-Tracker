@@ -38,3 +38,21 @@ export function formatPct(value: number): string {
 export function signOf(value: number): string {
   return value > 0 ? "+" : "";
 }
+
+// ── Session summary (pure computation — no server action allowed) ──────────────
+
+export interface BankrollSummary {
+  netPL: number;
+  totalSessions: number;
+  winningSessions: number;
+  totalMinutes: number;
+}
+
+export function computeSummary(rows: { pl: number; duration_minutes: number | null }[]): BankrollSummary {
+  return {
+    netPL: rows.reduce((sum, r) => sum + r.pl, 0),
+    totalSessions: rows.length,
+    winningSessions: rows.filter((r) => r.pl > 0).length,
+    totalMinutes: rows.reduce((sum, r) => sum + (r.duration_minutes ?? 0), 0),
+  };
+}

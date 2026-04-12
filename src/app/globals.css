@@ -43,8 +43,10 @@
 @theme inline {
   --color-background:    var(--color-bg-base);
   --color-foreground:    var(--color-text-primary);
-  --font-sans:           var(--font-geist-sans);
-  --font-mono:           var(--font-geist-mono);
+  /* Primary: Bricolage Grotesque — headings, brand, display */
+  --font-primary:        var(--font-primary);
+  /* Secondary: DM Sans — body, labels, UI */
+  --font-secondary:      var(--font-secondary);
 
   --color-gold:          var(--color-gold);
   --color-gold-hover:    var(--color-gold-hover);
@@ -83,9 +85,15 @@ body {
   min-height: 100%;
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  /* DM Sans as the default body font */
+  font-family: var(--font-secondary), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bricolage Grotesque for all headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary), system-ui, sans-serif;
 }
 
 /* Scrollbar */

@@ -35,10 +35,10 @@ export const gameTypeEnum = pgEnum("game_type", [
 export const groupRoleEnum = pgEnum("group_role", ["admin", "member"]);
 
 // ── Profiles ──────────────────────────────────────────────────────────────────
-// Extends Supabase auth.users. Populated via trigger on sign-up.
+// id is a TEXT field to hold Clerk's user ID format (e.g. user_2abc123)
 
 export const profiles = pgTable("profiles", {
-  id: uuid("id").primaryKey(), // matches auth.users.id
+  id: text("id").primaryKey(), // Clerk user ID
   email: text("email").notNull(),
   full_name: text("full_name"),
   username: text("username").unique(),
@@ -53,7 +53,7 @@ export const profiles = pgTable("profiles", {
     .default("active")
     .notNull(),
   subscription_expires_at: timestamp("subscription_expires_at"),
-  stripe_customer_id: text("stripe_customer_id"), // for future billing
+  stripe_customer_id: text("stripe_customer_id"),
 
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull(),
@@ -65,7 +65,7 @@ export const groups = pgTable("groups", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   description: text("description"),
-  created_by: uuid("created_by")
+  created_by: text("created_by")
     .notNull()
     .references(() => profiles.id, { onDelete: "cascade" }),
   invite_code: text("invite_code").unique(),
@@ -79,7 +79,7 @@ export const groupMembers = pgTable("group_members", {
   group_id: uuid("group_id")
     .notNull()
     .references(() => groups.id, { onDelete: "cascade" }),
-  user_id: uuid("user_id")
+  user_id: text("user_id")
     .notNull()
     .references(() => profiles.id, { onDelete: "cascade" }),
   role: groupRoleEnum("role").default("member").notNull(),
@@ -90,13 +90,13 @@ export const groupMembers = pgTable("group_members", {
 
 export const sessions = pgTable("sessions", {
   id: uuid("id").primaryKey().defaultRandom(),
-  user_id: uuid("user_id")
+  user_id: text("user_id")
     .notNull()
     .references(() => profiles.id, { onDelete: "cascade" }),
   date: timestamp("date").notNull(),
   venue: text("venue"),
   game_type: gameTypeEnum("game_type").default("cash").notNull(),
-  stakes: text("stakes"), // e.g. "1/2", "2/5"
+  stakes: text("stakes"),
   buy_in: numeric("buy_in", { precision: 12, scale: 2 }).notNull(),
   cash_out: numeric("cash_out", { precision: 12, scale: 2 }).notNull(),
   duration_minutes: integer("duration_minutes"),
@@ -113,7 +113,7 @@ export const sessions = pgTable("sessions", {
 
 export const handHistories = pgTable("hand_histories", {
   id: uuid("id").primaryKey().defaultRandom(),
-  user_id: uuid("user_id")
+  user_id: text("user_id")
     .notNull()
     .references(() => profiles.id, { onDelete: "cascade" }),
   session_id: uuid("session_id").references(() => sessions.id, {

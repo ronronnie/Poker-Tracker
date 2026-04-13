@@ -194,7 +194,7 @@ export function SessionForm({ trigger, session }: SessionFormProps) {
 
               {/* Date */}
               <div className="flex flex-col gap-2">
-                <Label htmlFor="sf-date">Date</Label>
+                <Label htmlFor="sf-date">Date <span style={{ color: "var(--color-danger)" }}>*</span></Label>
                 <Input id="sf-date" type="date" {...register("date")} error={!!errors.date} />
                 {errors.date && <p className="text-xs" style={{ color: "var(--color-danger)" }}>{errors.date.message}</p>}
               </div>
@@ -202,7 +202,7 @@ export function SessionForm({ trigger, session }: SessionFormProps) {
               {/* Game Type + Stakes */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-2">
-                  <Label>Game Type</Label>
+                  <Label>Game Type <span style={{ color: "var(--color-danger)" }}>*</span></Label>
                   <Select
                     value={watch("game_type")}
                     onValueChange={(v) => setValue("game_type", v as FormValues["game_type"])}
@@ -224,7 +224,7 @@ export function SessionForm({ trigger, session }: SessionFormProps) {
               {/* Buy-in / Cash-out */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-2">
-                  <Label htmlFor="sf-buyin">Buy-in (₹)</Label>
+                  <Label htmlFor="sf-buyin">Buy-in (₹) <span style={{ color: "var(--color-danger)" }}>*</span></Label>
                   <Input
                     id="sf-buyin"
                     type="number"
@@ -237,7 +237,7 @@ export function SessionForm({ trigger, session }: SessionFormProps) {
                   {errors.buy_in && <p className="text-xs" style={{ color: "var(--color-danger)" }}>{errors.buy_in.message}</p>}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Label htmlFor="sf-cashout">Cash-out (₹)</Label>
+                  <Label htmlFor="sf-cashout">Cash-out (₹) <span style={{ color: "var(--color-danger)" }}>*</span></Label>
                   <Input
                     id="sf-cashout"
                     type="number"
@@ -275,7 +275,7 @@ export function SessionForm({ trigger, session }: SessionFormProps) {
 
               {/* Duration */}
               <div className="flex flex-col gap-2">
-                <Label>Duration (optional)</Label>
+                <Label>Duration</Label>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="relative">
                     <Input

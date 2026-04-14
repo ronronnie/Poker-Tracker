@@ -75,7 +75,6 @@ export async function joinGroupByCode(
     role: "member",
   });
 
-  revalidatePath("/groups");
   return { groupId: group.id, alreadyMember: false };
 }
 

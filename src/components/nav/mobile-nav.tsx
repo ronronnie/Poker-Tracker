@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Bankroll", href: "/bankroll", icon: Wallet },
   { label: "Groups", href: "/groups", icon: Users },
-  { label: "History", href: "/hand-history", icon: BookOpen, soon: true },
+  { label: "History", href: "/hand-history", icon: BookOpen },
   { label: "Profile", href: "/profile", icon: User },
 ];
 
@@ -25,32 +25,19 @@ export function MobileNav() {
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
-      {NAV_ITEMS.map(({ label, href, icon: Icon, soon }) => {
+      {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
         const isActive = pathname === href || pathname.startsWith(href + "/");
         return (
           <Link
             key={href}
-            href={soon ? "#" : href}
-            onClick={soon ? (e) => e.preventDefault() : undefined}
+            href={href}
             className="flex-1 flex flex-col items-center justify-center gap-1 transition-colors"
             style={{
-              color: isActive
-                ? "var(--color-gold)"
-                : soon
-                ? "var(--color-text-muted)"
-                : "var(--color-text-secondary)",
+              color: isActive ? "var(--color-gold)" : "var(--color-text-secondary)",
             }}
           >
             <Icon className="w-5 h-5" />
             <span className="text-[10px] font-medium leading-none">{label}</span>
-            {soon && (
-              <span
-                className="absolute top-1 text-[8px] font-bold px-1 rounded-full"
-                style={{ background: "rgba(212,175,55,0.2)", color: "var(--color-gold-muted)" }}
-              >
-                •
-              </span>
-            )}
           </Link>
         );
       })}

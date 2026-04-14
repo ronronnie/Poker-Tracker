@@ -17,7 +17,7 @@ const NAV_ITEMS = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Bankroll", href: "/bankroll", icon: Wallet },
   { label: "Groups", href: "/groups", icon: Users },
-  { label: "Hand History", href: "/hand-history", icon: BookOpen, soon: true },
+  { label: "Hand History", href: "/hand-history", icon: BookOpen },
 ];
 
 // ── Sidebar ────────────────────────────────────────────────────────────────────
@@ -72,38 +72,21 @@ export function Sidebar() {
 
       {/* Nav items */}
       <nav className="flex-1 flex flex-col gap-1 px-3 py-4 overflow-y-auto">
-        {NAV_ITEMS.map(({ label, href, icon: Icon, soon }) => {
+        {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
           const isActive = pathname === href || pathname.startsWith(href + "/");
           return (
             <Link
               key={href}
-              href={soon ? "#" : href}
-              onClick={soon ? (e) => e.preventDefault() : undefined}
+              href={href}
               className="flex items-center gap-3 px-3 py-2.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors group"
               style={{
                 background: isActive ? "rgba(212,175,55,0.1)" : "transparent",
-                color: isActive
-                  ? "var(--color-gold)"
-                  : soon
-                  ? "var(--color-text-muted)"
-                  : "var(--color-text-secondary)",
-                cursor: soon ? "default" : "pointer",
+                color: isActive ? "var(--color-gold)" : "var(--color-text-secondary)",
+                cursor: "pointer",
               }}
             >
               <Icon className="w-4 h-4 shrink-0" />
               <span className="flex-1">{label}</span>
-              {soon && (
-                <span
-                  className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
-                  style={{
-                    background: "rgba(212,175,55,0.1)",
-                    color: "var(--color-gold-muted)",
-                    border: "1px solid rgba(212,175,55,0.2)",
-                  }}
-                >
-                  Soon
-                </span>
-              )}
             </Link>
           );
         })}

@@ -109,24 +109,24 @@ export const sessions = pgTable("sessions", {
 });
 
 // ── Hand Histories ────────────────────────────────────────────────────────────
-// Schema only — UI is a future module (currently "Coming Soon")
 
 export const handHistories = pgTable("hand_histories", {
   id: uuid("id").primaryKey().defaultRandom(),
-  user_id: text("user_id")
-    .notNull()
-    .references(() => profiles.id, { onDelete: "cascade" }),
-  session_id: uuid("session_id").references(() => sessions.id, {
-    onDelete: "set null",
-  }),
+  user_id: text("user_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  session_id: uuid("session_id").references(() => sessions.id, { onDelete: "set null" }),
   date: timestamp("date").notNull(),
-  hero_cards: jsonb("hero_cards").$type<string[]>(),
-  board_cards: jsonb("board_cards").$type<string[]>(),
-  position: text("position"),
-  pot_size: numeric("pot_size", { precision: 12, scale: 2 }),
-  outcome: numeric("outcome", { precision: 12, scale: 2 }),
+  game_type: gameTypeEnum("game_type").default("cash").notNull(),
+  stakes: text("stakes"),
+  table_size: integer("table_size"),
+  hero_position: text("hero_position"),
+  hero_hole_cards: jsonb("hero_hole_cards").$type<string[]>(),
+  result: text("result"), // "won" | "lost" | "split" | "observed"
+  result_amount: numeric("result_amount", { precision: 12, scale: 2 }),
+  pot_total: numeric("pot_total", { precision: 12, scale: 2 }),
   notes: text("notes"),
+  hand_data: jsonb("hand_data").$type<import("@/lib/hand-types").HandData>(),
   created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // ── Relations ─────────────────────────────────────────────────────────────────

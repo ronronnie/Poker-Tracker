@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { useSignUp } from "@clerk/nextjs/legacy";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
@@ -12,7 +10,6 @@ import { Label } from "@/components/ui/label";
 
 export default function SignupPage() {
   const { isLoaded, signUp, setActive } = useSignUp();
-  const router = useRouter();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,7 +18,6 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isPending, setIsPending] = useState(false);
-  const [awaitingVerification, setAwaitingVerification] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -55,11 +51,7 @@ export default function SignupPage() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        window.location.href = "/dashboard";
-      } else if (result.status === "missing_requirements") {
-        // Email verification is required — send the verification email
-        await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-        setAwaitingVerification(true);
+        window.location.href = "/dashboard?welcome=1";
       }
     } catch (err: unknown) {
       const clerkError = err as { errors?: { message: string }[] };
@@ -74,11 +66,6 @@ export default function SignupPage() {
     } finally {
       setIsPending(false);
     }
-  }
-
-  // ── Email verification step ────────────────────────────────────────────────
-  if (awaitingVerification) {
-    return <VerifyEmail email={email} signUp={signUp} setActive={setActive} />;
   }
 
   return (
@@ -206,81 +193,3 @@ export default function SignupPage() {
   );
 }
 
-// ── Email verification sub-screen ──────────────────────────────────────────────
-function VerifyEmail({
-  email,
-  signUp,
-  setActive,
-}: {
-  email: string;
-  signUp: ReturnType<typeof useSignUp>["signUp"];
-  setActive: ReturnType<typeof useSignUp>["setActive"];
-}) {
-  const router = useRouter();
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
-  const [isPending, setIsPending] = useState(false);
-
-  async function handleVerify(e: React.FormEvent) {
-    e.preventDefault();
-    if (!signUp) return;
-    setError("");
-    setIsPending(true);
-    try {
-      const result = await signUp.attemptEmailAddressVerification({ code });
-      if (result.status === "complete") {
-        await setActive!({ session: result.createdSessionId });
-        window.location.href = "/dashboard?welcome=1";
-      }
-    } catch (err: unknown) {
-      const clerkError = err as { errors?: { message: string }[] };
-      setError(clerkError.errors?.[0]?.message ?? "Invalid code. Please try again.");
-    } finally {
-      setIsPending(false);
-    }
-  }
-
-  return (
-    <div>
-      <div className="mb-8">
-        <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5"
-             style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.3)" }}>
-          <CheckCircle className="w-6 h-6" style={{ color: "var(--color-gold)" }} />
-        </div>
-        <h2 className="text-2xl font-extrabold mb-2"
-            style={{ color: "var(--color-text-primary)", fontFamily: "var(--font-primary)" }}>
-          Check your email
-        </h2>
-        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
-          We sent a 6-digit code to <span style={{ color: "var(--color-gold)" }}>{email}</span>
-        </p>
-      </div>
-
-      {error && (
-        <div className="mb-5 px-4 py-3 rounded-[var(--radius-md)] text-sm"
-             style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", color: "var(--color-danger)" }}>
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleVerify} className="flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="code">Verification Code</Label>
-          <Input
-            id="code"
-            type="text"
-            placeholder="123456"
-            autoFocus
-            maxLength={6}
-            value={code}
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-            required
-          />
-        </div>
-        <Button type="submit" size="lg" variant="primary" loading={isPending} className="w-full">
-          {isPending ? "Verifying…" : "Verify Email"}
-        </Button>
-      </form>
-    </div>
-  );
-}

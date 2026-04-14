@@ -55,7 +55,7 @@ export default function SignupPage() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        router.push("/dashboard");
+        window.location.href = "/dashboard";
       } else if (result.status === "missing_requirements") {
         // Email verification is required — send the verification email
         await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
@@ -230,7 +230,7 @@ function VerifyEmail({
       const result = await signUp.attemptEmailAddressVerification({ code });
       if (result.status === "complete") {
         await setActive!({ session: result.createdSessionId });
-        router.push("/dashboard?welcome=1");
+        window.location.href = "/dashboard?welcome=1";
       }
     } catch (err: unknown) {
       const clerkError = err as { errors?: { message: string }[] };

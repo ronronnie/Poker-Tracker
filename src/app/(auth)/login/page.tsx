@@ -33,7 +33,7 @@ export default function LoginPage() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        router.push("/dashboard");
+        window.location.href = "/dashboard";
       }
     } catch (err: unknown) {
       const clerkError = err as { errors?: { message: string }[] };

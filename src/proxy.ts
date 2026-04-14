@@ -7,8 +7,8 @@ export default clerkMiddleware(async (auth, request) => {
   const { userId } = await auth();
   const { pathname } = new URL(request.url);
 
-  // Redirect authenticated users from root to dashboard
-  if (userId && pathname === "/") {
+  // Redirect authenticated users away from auth pages and root
+  if (userId && (pathname === "/" || pathname === "/login" || pathname === "/signup")) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

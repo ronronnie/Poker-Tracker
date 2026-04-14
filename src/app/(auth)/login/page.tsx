@@ -33,13 +33,13 @@ export default function LoginPage() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        window.location.replace("https://www.useouts.com/dashboard");
+        window.location.reload();
       }
     } catch (err: unknown) {
       const clerkError = err as { errors?: { code?: string; message: string }[] };
       const firstError = clerkError.errors?.[0];
       if (firstError?.code === "session_exists" || firstError?.message?.toLowerCase().includes("session already exists")) {
-        window.location.replace("https://www.useouts.com/dashboard");
+        window.location.reload();
         return;
       }
       setError(firstError?.message ?? "Incorrect email or password. Please try again.");

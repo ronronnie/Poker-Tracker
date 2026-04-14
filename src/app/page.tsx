@@ -737,7 +737,7 @@ export default function LandingPage() {
             </div>
             <h2
               className="text-4xl sm:text-5xl font-extrabold leading-tight mb-6"
-              style={{ color: "var(--color-text-primary)", fontFamily: "var(--font-primary)" }}
+              style={{ color: "var(--color-text-primary)", fontFamily: "var(--font-primary)", textWrap: "balance" } as React.CSSProperties}
             >
               Ready to level up{" "}
               <span style={{ color: "var(--color-gold)" }}>your game?</span>

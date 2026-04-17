@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { joinGroupByCode } from "@/app/actions/groups";
+import { ensureProfile } from "@/app/actions/auth";
 
 // params is a Promise in Next.js 16
 interface PageProps {
@@ -9,6 +10,10 @@ interface PageProps {
 
 export default async function JoinPage({ params }: PageProps) {
   const { code } = await params;
+
+  // Ensure profile exists before joining — users coming straight from an invite
+  // link may not have hit the dashboard layout yet (which normally calls this).
+  await ensureProfile();
 
   try {
     const { groupId, alreadyMember } = await joinGroupByCode(code);

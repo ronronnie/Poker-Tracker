@@ -48,6 +48,10 @@ export async function joinGroupByCode(
   const { userId } = await auth();
   if (!userId) redirect("/login");
 
+  // Ensure a profile row exists before inserting into groupMembers (FK constraint)
+  const { ensureProfile } = await import("@/app/actions/auth");
+  await ensureProfile();
+
   const [group] = await db
     .select()
     .from(groups)

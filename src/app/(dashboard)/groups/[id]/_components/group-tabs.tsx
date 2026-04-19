@@ -146,7 +146,7 @@ function MembersTab({
       toast({ title: "Member removed", variant: "default" });
       router.refresh();
     } catch (err) {
-      toast({ title: err instanceof Error ? err.message : "Failed", variant: "error" });
+      toast({ title: "Something went wrong. Please try again.", variant: "error" });
     } finally {
       setPending(null);
     }
@@ -159,7 +159,7 @@ function MembersTab({
       toast({ title: role === "admin" ? "Promoted to admin" : "Demoted to member", variant: "success" });
       router.refresh();
     } catch (err) {
-      toast({ title: err instanceof Error ? err.message : "Failed", variant: "error" });
+      toast({ title: "Something went wrong. Please try again.", variant: "error" });
     } finally {
       setPending(null);
     }
@@ -171,7 +171,7 @@ function MembersTab({
       toast({ title: "Left group", variant: "default" });
       router.push("/groups");
     } catch (err) {
-      toast({ title: err instanceof Error ? err.message : "Failed", variant: "error" });
+      toast({ title: "Something went wrong. Please try again.", variant: "error" });
     }
   }
 
@@ -182,7 +182,7 @@ function MembersTab({
       toast({ title: "Group deleted", variant: "default" });
       router.push("/groups");
     } catch (err) {
-      toast({ title: err instanceof Error ? err.message : "Failed", variant: "error" });
+      toast({ title: "Something went wrong. Please try again.", variant: "error" });
     }
   }
 

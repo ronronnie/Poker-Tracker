@@ -57,11 +57,11 @@ export default function SignupPage() {
       const clerkError = err as { errors?: { message: string }[] };
       const firstError = clerkError.errors?.[0];
       if (firstError?.message.toLowerCase().includes("password")) {
-        setFieldErrors({ password: firstError.message });
+        setFieldErrors({ password: "Password doesn't meet requirements. Try a stronger one." });
       } else if (firstError?.message.toLowerCase().includes("email")) {
-        setFieldErrors({ email: firstError.message });
+        setFieldErrors({ email: "This email is already in use or invalid." });
       } else {
-        setError(firstError?.message ?? "Something went wrong. Please try again.");
+        setError("Something went wrong. Please try again.");
       }
     } finally {
       setIsPending(false);

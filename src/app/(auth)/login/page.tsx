@@ -42,7 +42,7 @@ export default function LoginPage() {
         window.location.reload();
         return;
       }
-      setError(firstError?.message ?? "Incorrect email or password. Please try again.");
+      setError("Incorrect email or password. Please try again.");
     } finally {
       setIsPending(false);
     }

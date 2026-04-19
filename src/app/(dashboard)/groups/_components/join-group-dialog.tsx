@@ -35,7 +35,7 @@ export function JoinGroupDialog({ trigger }: Props) {
         setCode("");
         router.push(`/groups/${groupId}`);
       } catch (err) {
-        toast({ title: err instanceof Error ? err.message : "Invalid code", variant: "error" });
+        toast({ title: "Invalid or expired invite code.", variant: "error" });
       }
     });
   }

@@ -23,8 +23,7 @@ export default async function JoinPage({ params }: PageProps) {
     // redirect() itself throws — re-throw it
     if (err instanceof Error && err.message === "NEXT_REDIRECT") throw err;
 
-    const message =
-      err instanceof Error ? err.message : "This invite link is invalid or has expired.";
+    const message = "This invite link is invalid or has expired.";
 
     return (
       <div

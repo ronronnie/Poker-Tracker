@@ -37,7 +37,7 @@ export function EditProfileDialog({ currentName, currentUsername }: Props) {
         setOpen(false);
       } catch (err) {
         toast({
-          title: err instanceof Error ? err.message : "Failed to update",
+          title: "Something went wrong. Please try again.",
           variant: "error",
         });
       }
